@@ -41,7 +41,6 @@ export { default as CustomerActivityBadgePreview } from './CustomerActivityBadge
 export { default as TrustpilotRatingBadgePreview } from './TrustpilotRatingBadgePreview';
 export { default as PeopleViewingBadgePreview } from './PeopleViewingBadgePreview';
 export { default as BestSellerBadgePreview } from './BestSellerBadgePreview';
-export { default as BestsellerBadgePreview } from './BestsellerBadgePreview';
 export { default as AwardWinningBadgePreview } from './AwardWinningBadgePreview';
 export { default as ScrollingTextBannerPreview } from './ScrollingTextBannerPreview';
 export { default as CustomerReviewsPreview } from './CustomerReviewsPreview';
