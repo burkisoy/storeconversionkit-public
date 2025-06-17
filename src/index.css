@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.dark {
+  color-scheme: dark;
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Chrome performance optimizations */
+  .transform-gpu {
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-perspective: 1000;
+    perspective: 1000;
+  }
+
+  /* Smooth scrolling for Chrome */
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Optimize animations for Chrome */
+  @media screen and (-webkit-min-device-pixel-ratio: 0) {
+    .group:hover {
+      transform: translateZ(0);
+    }
+  }
+}
+
+/* Hide announcement bar when body has this class */
+body.hide-announcement-bar a[href*="buy.stripe.com"] {
+  display: none;
+}
