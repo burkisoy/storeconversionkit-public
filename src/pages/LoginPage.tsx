@@ -100,15 +100,15 @@ const LoginPage = () => {
         setError(error.message);
       } else if (data.session) {
         try {
-          // Create a new session in our custom session management system
-          const success = await createSession(
-            data.session.user.id,
-            data.session.access_token
-          );
-          
-          if (!success) {
-            setError('Failed to create session. Please try again.');
-            return;
+          // Try to create a new session in our custom session management system
+          // This is optional - if it fails, we still allow login
+          try {
+            await createSession(
+              data.session.user.id,
+              data.session.access_token
+            );
+          } catch (sessionError) {
+            console.warn('Session creation failed, but continuing with login:', sessionError);
           }
           
           // Check if user has premium access
@@ -119,9 +119,9 @@ const LoginPage = () => {
           
           // Redirect to home page
           window.location.href = '/';
-        } catch (sessionError) {
-          console.error('Session creation error:', sessionError);
-          setError('Failed to create session. Please try again.');
+        } catch (error) {
+          console.error('Login error:', error);
+          setError('Login failed. Please try again.');
         }
       }
     } catch (err) {

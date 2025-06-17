@@ -14,46 +14,49 @@ const VALIDATION_INTERVAL = 30 * 60 * 1000;
  */
 export const createSession = async (userId: string, sessionToken: string) => {
   try {
-    // Store session info locally
+    // Store session info locally first (this is the most important part)
     localStorage.setItem(SESSION_TOKEN_KEY, sessionToken);
     localStorage.setItem(SESSION_USER_ID_KEY, userId);
     localStorage.setItem(SESSION_LAST_VALIDATED_KEY, Date.now().toString());
     
-    // Call the edge function to create the session in the database using secure request
-    const response = await makeSecureRequest(
-      `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-session`,
-      {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
-        },
-        body: {
-          userId,
-          sessionToken,
-          userAgent: navigator.userAgent,
-          ipAddress: null // We can't get this client-side
+    // Try to call the edge function to create the session in the database
+    // This is optional - if it fails, we still have local session
+    try {
+      const response = await makeSecureRequest(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-session`,
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
+          },
+          body: {
+            userId,
+            sessionToken,
+            userAgent: navigator.userAgent,
+            ipAddress: null // We can't get this client-side
+          }
         }
+      );
+      
+      if (!response.ok) {
+        console.warn(`Session creation API failed: HTTP ${response.status}`);
+        return true; // Still return true since local session is created
       }
-    );
-    
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      
+      const data = await response.json();
+      
+      if (!data.success) {
+        console.warn('Session creation API returned error:', data.error);
+        return true; // Still return true since local session is created
+      }
+      
+      return true;
+    } catch (apiError) {
+      console.warn('Session creation API failed, but local session created:', apiError);
+      return true; // Local session is still valid
     }
-    
-    const data = await response.json();
-    
-    if (!data.success) {
-      console.error('Failed to create session:', data.error);
-      return false;
-    }
-    
-    return true;
   } catch (error) {
-    if (error instanceof CorsError) {
-      handleCorsError(error);
-      return false;
-    }
-    console.error('Error creating session:', error);
+    console.error('Error creating local session:', error);
     return false;
   }
 };
