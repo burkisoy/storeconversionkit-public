@@ -43,7 +43,6 @@ import {
   CustomerActivityBadgePreviewPanel,
   TrustpilotRatingBadgePreviewPanel,
   PeopleViewingBadgePreviewPanel,
-  BestSellerBadgePreviewPanel,
   BestsellerBadgePreviewPanel,
   AwardWinningBadgePreviewPanel,
   ScrollingTextBannerPreviewPanel,
@@ -149,7 +148,7 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({ component, customValues }) 
       case 'people-viewing-badge':
         return <PeopleViewingBadgePreviewPanel component={component} customValues={customValues} />;
       case 'best-seller-badge':
-        return <BestSellerBadgePreviewPanel component={component} customValues={customValues} />;
+        return <BestsellerBadgePreviewPanel component={component} customValues={customValues} />;
       case 'bestseller-badge':
         return <BestsellerBadgePreviewPanel component={component} customValues={customValues} />;
       case 'award-winning-badge':

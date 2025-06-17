@@ -40,7 +40,6 @@ export { default as ShippingBadgePreviewPanel } from './ShippingBadgePreviewPane
 export { default as CustomerActivityBadgePreviewPanel } from './CustomerActivityBadgePreviewPanel';
 export { default as TrustpilotRatingBadgePreviewPanel } from './TrustpilotRatingBadgePreviewPanel';
 export { default as PeopleViewingBadgePreviewPanel } from './PeopleViewingBadgePreviewPanel';
-export { default as BestSellerBadgePreviewPanel } from './BestSellerBadgePreviewPanel';
 export { default as BestsellerBadgePreviewPanel } from './BestsellerBadgePreviewPanel';
 export { default as AwardWinningBadgePreviewPanel } from './AwardWinningBadgePreviewPanel';
 export { default as ScrollingTextBannerPreviewPanel } from './ScrollingTextBannerPreviewPanel';

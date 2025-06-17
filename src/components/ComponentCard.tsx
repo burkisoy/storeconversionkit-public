@@ -5,7 +5,7 @@ import { ComponentWithCustomization } from '../types';
 import * as Previews from './previews';
 import PremiumModal from './ui/PremiumModal';
 import { supabase, getCachedAuthStatus, setCachedAuthStatus, refreshSession, checkPremiumStatus } from '../lib/supabase';
-import { Users, Lock, Unlock, Wand2 } from 'lucide-react';
+import { Lock, Unlock, Wand2 } from 'lucide-react';
 import { clearSession } from '../lib/sessionManager';
 
 interface ComponentCardProps {
@@ -16,7 +16,7 @@ const ComponentCard: React.FC<ComponentCardProps> = ({ component }) => {
   const [showPremiumModal, setShowPremiumModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isPremiumUser, setIsPremiumUser] = useState(false);
-  const [customizeCount, setCustomizeCount] = useState(0);
+
   const [error, setError] = useState<string | null>(null);
 
   // Retry mechanism with exponential backoff
@@ -98,10 +98,8 @@ const ComponentCard: React.FC<ComponentCardProps> = ({ component }) => {
           table: 'sections',
           filter: `id=eq.${component.id}`,
         },
-        (payload: any) => {
-          if (payload.new && isMounted) {
-            setCustomizeCount(payload.new.customize_count || 0);
-          }
+        (_payload: any) => {
+          // Customize count updated in database
         }
       )
       .subscribe();
@@ -127,10 +125,9 @@ const ComponentCard: React.FC<ComponentCardProps> = ({ component }) => {
           return data;
         };
 
-        const data = await fetchWithRetry(fetchCount);
+        await fetchWithRetry(fetchCount);
 
         if (isMounted) {
-          setCustomizeCount(data?.customize_count || 0);
           setError(null);
         }
       } catch (err) {
@@ -236,7 +233,7 @@ const ComponentCard: React.FC<ComponentCardProps> = ({ component }) => {
       'trustpilot-rating-badge': Previews.TrustpilotRatingBadgePreview,
       'people-viewing-badge': Previews.PeopleViewingBadgePreview,
       'best-seller-badge': Previews.BestSellerBadgePreview,
-      'bestseller-badge': Previews.BestsellerBadgePreview,
+      'bestseller-badge': Previews.BestSellerBadgePreview,
       'award-winning-badge': Previews.AwardWinningBadgePreview,
       'scrolling-text-banner': Previews.ScrollingTextBannerPreview,
       'customer-reviews': Previews.CustomerReviewsPreview,
