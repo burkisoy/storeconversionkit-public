@@ -190,6 +190,7 @@ const ComponentCard: React.FC<ComponentCardProps> = ({ component }) => {
 
   const renderPreview = () => {
     const previewMap: Record<string, React.ComponentType> = {
+      'product-features': Previews.ProductFeaturesPreview,
       'items-left-badge': Previews.ItemsLeftBadgePreview,
       'scroll-to-top': Previews.ScrollToTopPreview,
       'customer-banner': Previews.CustomerBannerPreview,

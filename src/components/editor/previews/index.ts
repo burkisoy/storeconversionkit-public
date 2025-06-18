@@ -1,3 +1,4 @@
+export { default as ProductFeaturesPreviewPanel } from './ProductFeaturesPreviewPanel';
 export { default as ItemsLeftBadgePreviewPanel } from './ItemsLeftBadgePreviewPanel';
 export { default as ScrollToTopPreviewPanel } from './ScrollToTopPreviewPanel';
 export { default as CustomerBannerPreviewPanel } from './CustomerBannerPreviewPanel';

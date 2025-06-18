@@ -1,3 +1,4 @@
+import { productFeatures } from './product-features';
 import { howToUse } from './how-to-use';
 import { moneyBackGuarantee2 } from './money-back-guarantee-2';
 import { premiumReviewBadge } from './premium-review-badge';
@@ -52,6 +53,7 @@ import { lowStock } from './low-stock';
 import { testimonial } from './testimonial';
 
 export const components = [
+  productFeatures,
   howToUse,
   moneyBackGuarantee2,
   premiumReviewBadge,

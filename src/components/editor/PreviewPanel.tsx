@@ -1,6 +1,7 @@
 import React from 'react';
 import { ComponentWithCustomization } from '../../types';
 import {
+  ProductFeaturesPreviewPanel,
   ItemsLeftBadgePreviewPanel,
   ScrollToTopPreviewPanel,
   CustomerBannerPreviewPanel,
@@ -63,6 +64,8 @@ interface PreviewPanelProps {
 const PreviewPanel: React.FC<PreviewPanelProps> = ({ component, customValues }) => {
   const renderPreview = () => {
     switch (component.id) {
+      case 'product-features':
+        return <ProductFeaturesPreviewPanel customValues={customValues} />;
       case 'items-left-badge':
         return <ItemsLeftBadgePreviewPanel component={component} customValues={customValues} />;
       case 'scroll-to-top':

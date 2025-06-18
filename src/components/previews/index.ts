@@ -1,3 +1,4 @@
+export { default as ProductFeaturesPreview } from './ProductFeaturesPreview';
 export { default as ItemsLeftBadgePreview } from './ItemsLeftBadgePreview';
 export { default as ScrollToTopPreview } from './ScrollToTopPreview';
 export { default as CustomerBannerPreview } from './CustomerBannerPreview';

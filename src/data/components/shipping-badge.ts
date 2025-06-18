@@ -6,158 +6,93 @@ export const shippingBadge: ComponentWithCustomization = {
   description: 'Display shipping information with estimated delivery date and free shipping status',
   category: 'Trust',
   tags: ['shipping', 'delivery', 'badge', 'trust'],
-  code: `<div style="
+  code: `<div id="smart-shipping-box" style="
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: {{ background_color | default: '#ffffff' }};
-  border-radius: {{ border_radius | default: '9999px' }};
-  padding: {{ padding | default: '8px 20px' }};
-  box-shadow: {{ box_shadow | default: '0 2px 8px rgba(0,0,0,0.1)' }};
-  font-family: {{ font_family | default: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" }};
-  font-size: {{ font_size | default: '14px' }};
-  color: {{ text_color | default: '#222222' }};
-  gap: {{ gap | default: '25px' }};
+  background-color: #ffffff;
+  border-radius: 9999px;
+  padding: 8px 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: clamp(11px, 2.5vw, 14px);
+  color: #222222;
+  gap: 14px;
   width: fit-content;
+  max-width: 95vw;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   margin: 0 auto;
 ">
-  <div style="
-    display: flex;
-    align-items: center;
-    gap: {{ item_gap | default: '8px' }};
-    white-space: nowrap;
-  ">
-    <div style="
-      width: {{ dot_size | default: '10px' }};
-      height: {{ dot_size | default: '10px' }};
-      background-color: {{ dot_color | default: '#00c851' }};
+  <div style="display: flex; align-items: center; gap: 6px;">
+    <div class="flash-dot-xyz123" style="
+      width: 10px;
+      height: 10px;
+      background-color: #00c851;
       border-radius: 50%;
       flex-shrink: 0;
     "></div>
-    <div>Ships by <span style="font-weight: {{ bold_weight | default: '600' }};">{{ delivery_date | default: 'Wed, April 27' }}</span></div>
+    <div>Ships by <span id="ship-date" style="font-weight: 600;">...</span></div>
   </div>
-  <div style="
-    display: flex;
-    align-items: center;
-    gap: {{ item_gap | default: '8px' }};
-    white-space: nowrap;
-  ">
-    <img 
-      src="{{ flag_url | default: 'https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg' }}"
-      alt="{{ flag_alt | default: 'US Flag' }}"
-      style="
-        width: {{ flag_size | default: '18px' }};
-        height: {{ flag_size | default: '18px' }};
-        border-radius: 50%;
-        object-fit: cover;
-        flex-shrink: 0;
-      "
-    >
-    <div><span style="font-weight: {{ bold_weight | default: '600' }};">{{ shipping_text | default: 'FREE' }}</span> {{ country_text | default: 'US Shipping' }}</div>
+  <div style="display: flex; align-items: center; gap: 6px;">
+    <img id="flag-icon" src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg" alt="Flag" style="width: 18px; height: 18px; border-radius: 50%; object-fit: cover; flex-shrink: 0;">
+    <div id="shipping-text" style="font-weight: 600;">FREE Shipping</div>
   </div>
-</div>`,
-  customizationOptions: [
-    {
-      id: 'delivery_date',
-      label: 'Delivery Date',
-      type: 'text',
-      defaultValue: 'Wed, April 27'
-    },
-    {
-      id: 'shipping_text',
-      label: 'Shipping Text',
-      type: 'text',
-      defaultValue: 'FREE'
-    },
-    {
-      id: 'country_text',
-      label: 'Country Text',
-      type: 'text',
-      defaultValue: 'US Shipping'
-    },
-    {
-      id: 'background_color',
-      label: 'Background Color',
-      type: 'color',
-      defaultValue: '#ffffff'
-    },
-    {
-      id: 'text_color',
-      label: 'Text Color',
-      type: 'color',
-      defaultValue: '#222222'
-    },
-    {
-      id: 'dot_color',
-      label: 'Dot Color',
-      type: 'color',
-      defaultValue: '#00c851'
-    },
-    {
-      id: 'dot_size',
-      label: 'Dot Size',
-      type: 'text',
-      defaultValue: '10px'
-    },
-    {
-      id: 'flag_size',
-      label: 'Flag Size',
-      type: 'text',
-      defaultValue: '18px'
-    },
-    {
-      id: 'font_size',
-      label: 'Font Size',
-      type: 'text',
-      defaultValue: '14px'
-    },
-    {
-      id: 'bold_weight',
-      label: 'Bold Text Weight',
-      type: 'text',
-      defaultValue: '600'
-    },
-    {
-      id: 'padding',
-      label: 'Padding',
-      type: 'text',
-      defaultValue: '8px 20px'
-    },
-    {
-      id: 'gap',
-      label: 'Gap Between Items',
-      type: 'text',
-      defaultValue: '25px'
-    },
-    {
-      id: 'item_gap',
-      label: 'Gap Inside Items',
-      type: 'text',
-      defaultValue: '8px'
-    },
-    {
-      id: 'border_radius',
-      label: 'Border Radius',
-      type: 'text',
-      defaultValue: '9999px'
-    },
-    {
-      id: 'box_shadow',
-      label: 'Box Shadow',
-      type: 'text',
-      defaultValue: '0 2px 8px rgba(0,0,0,0.1)'
-    },
-    {
-      id: 'flag_url',
-      label: 'Flag Image URL',
-      type: 'text',
-      defaultValue: 'https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg'
-    },
-    {
-      id: 'flag_alt',
-      label: 'Flag Alt Text',
-      type: 'text',
-      defaultValue: 'US Flag'
-    }
-  ]
+</div>
+
+<style>
+@keyframes pulseDot {
+  0% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(1.2); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.flash-dot-xyz123 {
+  animation: pulseDot 1.2s infinite ease-in-out;
+}
+</style>
+
+<script>
+  // 1. Tarihi otomatik yaz (her zaman bugünün tarihi)
+  const today = new Date();
+  const options = { weekday: 'short', month: 'long', day: 'numeric' };
+  const formattedDate = today.toLocaleDateString('en-US', options); // İngilizce format
+  document.getElementById('ship-date').textContent = formattedDate;
+
+  // 2. Bayrak ve "Ücretsiz Kargo" metni yerelleştirme
+  fetch('https://ipapi.co/json/')
+    .then(res => res.json())
+    .then(data => {
+      const country = data.country;
+      const flag = document.getElementById('flag-icon');
+      const text = document.getElementById('shipping-text');
+
+      const map = {
+        US: { flag: 'https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg', text: 'FREE Shipping' },
+        FR: { flag: 'https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg', text: 'LIVRAISON GRATUITE' },
+        DE: { flag: 'https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg', text: 'KOSTENLOSER VERSAND' },
+        TR: { flag: 'https://upload.wikimedia.org/wikipedia/commons/b/b4/Flag_of_Turkey.svg', text: 'ÜCRETSİZ KARGO' },
+        IT: { flag: 'https://upload.wikimedia.org/wikipedia/en/0/03/Flag_of_Italy.svg', text: 'SPEDIZIONE GRATUITA' },
+        ES: { flag: 'https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg', text: 'ENVÍO GRATUITO' },
+        NL: { flag: 'https://upload.wikimedia.org/wikipedia/en/2/20/Flag_of_the_Netherlands.svg', text: 'GRATIS VERZENDING' },
+        JP: { flag: 'https://upload.wikimedia.org/wikipedia/en/9/9e/Flag_of_Japan.svg', text: '送料無料' },
+        KR: { flag: 'https://upload.wikimedia.org/wikipedia/commons/0/09/Flag_of_South_Korea.svg', text: '무료 배송' },
+        CN: { flag: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg', text: '免运费' },
+        IN: { flag: 'https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg', text: 'फ्री शिपिंग' },
+        BR: { flag: 'https://upload.wikimedia.org/wikipedia/en/0/05/Flag_of_Brazil.svg', text: 'FRETE GRÁTIS' },
+        RU: { flag: 'https://upload.wikimedia.org/wikipedia/en/f/f3/Flag_of_Russia.svg', text: 'БЕСПЛАТНАЯ ДОСТАВКА' },
+        PL: { flag: 'https://upload.wikimedia.org/wikipedia/en/1/12/Flag_of_Poland.svg', text: 'DOSTAWA GRATIS' }
+      };
+
+      const fallback = {
+        flag: 'https://upload.wikimedia.org/wikipedia/commons/e/e3/Globe_icon.svg',
+        text: 'Free Worldwide Shipping'
+      };
+
+      const selected = map[country] || fallback;
+      flag.src = selected.flag;
+      text.textContent = selected.text;
+    });
+</script>`,
+  customizationOptions: []
 };

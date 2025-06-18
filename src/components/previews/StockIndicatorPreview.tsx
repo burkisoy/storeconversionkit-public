@@ -1,5 +1,3 @@
-import React from 'react';
-
 const StockIndicatorPreview = () => {
   return (
     <div className="w-full h-full flex items-center justify-center">
