@@ -67,7 +67,7 @@ const SecureComparisonTable: React.FC = () => {
           <div 
             key={index}
             className={`grid grid-cols-3 text-[6px] p-1 border-b border-gray-200 ${
-              index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
+                              index % 2 === 0 ? 'bg-white' : 'bg-gradient-to-r from-gray-50 to-slate-50'
             }`}
           >
             <div className="text-left">{feature}</div>

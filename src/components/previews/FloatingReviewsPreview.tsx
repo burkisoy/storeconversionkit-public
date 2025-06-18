@@ -27,7 +27,7 @@ const SecureFloatingReviews: React.FC = () => {
   ];
 
   return (
-    <div className="w-full h-full bg-gray-50 p-2 overflow-hidden relative">
+    <div className="w-full h-full bg-gradient-to-br from-gray-50 to-slate-50 p-2 overflow-hidden relative">
       <style>
         {`
           @keyframes shakeIn {

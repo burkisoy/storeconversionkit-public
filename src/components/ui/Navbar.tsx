@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import HowToUsePopup from './HowToUsePopup';
 import ProfileDropdown from './ProfileDropdown';
 import ContactSupportModal from './ContactSupportModal';
+import StatusButton from './StatusButton';
 import { setCachedAuthStatus, checkPremiumStatus } from '../../lib/supabase';
 import { clearSession } from '../../lib/sessionManager';
 
@@ -170,7 +171,7 @@ const Navbar = () => {
               className="group flex items-center space-x-3"
             >
               <Code2 className="w-6 h-6 text-blue-600" />
-              <span className="relative text-[15px] tracking-tight font-semibold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-gray-800 to-gray-600">
+              <span className="relative text-[15px] tracking-tight font-semibold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-pink-500">
                 Store Conversion Kit
               </span>
             </Link>
@@ -193,6 +194,7 @@ const Navbar = () => {
                 </div>
               ) : user ? (
                 <>
+                  <StatusButton />
                   <button
                     onClick={() => setIsContactModalOpen(true)}
                     className="px-5 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors flex items-center gap-2"
@@ -206,12 +208,22 @@ const Navbar = () => {
                 <>
                   <button
                     onClick={handleAddToCart}
-                    className="relative px-5 py-2 text-sm font-medium group/button"
+                    className="relative px-5 py-2 text-sm font-medium group/button overflow-hidden"
                   >
-                    <div className="absolute inset-0 bg-blue-600 rounded-xl transition-transform group-hover/button:scale-[1.02]" />
+                    {/* Animated gradient background */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 rounded-xl animate-gradient-x" />
+                    
+                    {/* Shine effect */}
+                    <div className="absolute inset-0 rounded-xl overflow-hidden">
+                      <div className="absolute inset-0 -translate-x-full group-hover/button:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                    </div>
+                    
+                    {/* Pulse effect on hover */}
+                    <div className="absolute inset-0 bg-white/0 group-hover/button:bg-white/10 rounded-xl transition-all duration-300 group-hover/button:animate-pulse" />
+                    
                     <span className="relative text-white flex items-center gap-2">
-                      <span>Get Premium</span>
-                      <span className="px-2 py-0.5 bg-white/20 rounded-md text-[11px] font-semibold">
+                      <span className="group-hover/button:scale-105 transition-transform duration-200">Get Premium</span>
+                      <span className="px-2 py-0.5 bg-white/20 rounded-md text-[11px] font-semibold group-hover/button:bg-white/30 transition-colors duration-200">
                         $39
                       </span>
                     </span>
@@ -256,6 +268,9 @@ const Navbar = () => {
                   </div>
                 ) : user ? (
                   <>
+                    <div className="flex justify-center">
+                      <StatusButton />
+                    </div>
                     <button
                       onClick={() => {
                         setIsContactModalOpen(true);
@@ -277,12 +292,22 @@ const Navbar = () => {
                   <>
                     <button
                       onClick={handleAddToCart}
-                      className="relative w-full px-5 py-2 text-sm font-medium group/button"
+                      className="relative w-full px-5 py-2 text-sm font-medium group/button overflow-hidden"
                     >
-                      <div className="absolute inset-0 bg-blue-600 rounded-xl transition-transform group-hover/button:scale-[1.02]" />
+                      {/* Animated gradient background */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 rounded-xl animate-gradient-x" />
+                      
+                      {/* Shine effect */}
+                      <div className="absolute inset-0 rounded-xl overflow-hidden">
+                        <div className="absolute inset-0 -translate-x-full group-hover/button:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                      </div>
+                      
+                      {/* Pulse effect on hover */}
+                      <div className="absolute inset-0 bg-white/0 group-hover/button:bg-white/10 rounded-xl transition-all duration-300 group-hover/button:animate-pulse" />
+                      
                       <span className="relative text-white flex items-center justify-center gap-2">
-                        <span>Get Premium</span>
-                        <span className="px-2 py-0.5 bg-white/20 rounded-md text-[11px] font-semibold">
+                        <span className="group-hover/button:scale-105 transition-transform duration-200">Get Premium</span>
+                        <span className="px-2 py-0.5 bg-white/20 rounded-md text-[11px] font-semibold group-hover/button:bg-white/30 transition-colors duration-200">
                           $39
                         </span>
                       </span>

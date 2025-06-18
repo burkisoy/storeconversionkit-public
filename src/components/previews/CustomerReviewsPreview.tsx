@@ -74,7 +74,7 @@ const SecureCustomerReviews: React.FC = () => {
             </p>
             
             {/* Product Box */}
-            <div className="bg-gray-50 rounded p-1 flex items-center gap-1">
+            <div className="bg-gradient-to-r from-gray-50 to-slate-50 rounded p-1 flex items-center gap-1">
               <div className="w-8 h-8 bg-gray-200 rounded flex items-center justify-center">
                 <span className="text-[8px]">📦</span>
               </div>

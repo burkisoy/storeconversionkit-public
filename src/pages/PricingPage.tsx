@@ -27,7 +27,7 @@ const PricingPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 via-gray-50 to-zinc-50">
       <Navbar />
       
       <main className="flex-1 py-16">

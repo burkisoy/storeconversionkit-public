@@ -36,7 +36,7 @@ const HomePage = () => {
       <Navbar />
       
       <main className="flex-1">
-        <section className="py-16 bg-gray-50">
+        <section className="py-16 bg-gradient-to-br from-slate-50 via-gray-50 to-zinc-50">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center mb-12">
               <div className="flex justify-center gap-2 mb-4 flex-wrap">
@@ -75,7 +75,7 @@ const HomePage = () => {
 
               <div className="grid gap-4">
                 {/* Step 1 */}
-                <div className="bg-gray-50/80 backdrop-blur-xl rounded-xl p-4 border border-gray-100 shadow-sm hover:bg-gray-50 transition-colors">
+                <div className="bg-gradient-to-br from-gray-50/80 to-slate-50/80 backdrop-blur-xl rounded-xl p-4 border border-gray-100 shadow-sm hover:bg-gradient-to-br hover:from-gray-50 hover:to-slate-50 transition-all">
                   <div className="flex items-start gap-4">
                     <div className="w-10 h-10 bg-gradient-to-br from-blue-500/20 to-blue-600/20 rounded-lg flex items-center justify-center text-blue-700 font-semibold shadow-sm border border-blue-500/30">
                       1
@@ -97,7 +97,7 @@ const HomePage = () => {
                 </div>
 
                 {/* Step 2 */}
-                <div className="bg-gray-50/80 backdrop-blur-xl rounded-xl p-4 border border-gray-100 shadow-sm hover:bg-gray-50 transition-colors">
+                <div className="bg-gradient-to-br from-gray-50/80 to-slate-50/80 backdrop-blur-xl rounded-xl p-4 border border-gray-100 shadow-sm hover:bg-gradient-to-br hover:from-gray-50 hover:to-slate-50 transition-all">
                   <div className="flex items-start gap-4">
                     <div className="w-10 h-10 bg-gradient-to-br from-violet-500/20 to-violet-600/20 rounded-lg flex items-center justify-center text-violet-700 font-semibold shadow-sm border border-violet-500/30">
                       2
@@ -119,7 +119,7 @@ const HomePage = () => {
                 </div>
 
                 {/* Step 3 */}
-                <div className="bg-gray-50/80 backdrop-blur-xl rounded-xl p-4 border border-gray-100 shadow-sm hover:bg-gray-50 transition-colors">
+                <div className="bg-gradient-to-br from-gray-50/80 to-slate-50/80 backdrop-blur-xl rounded-xl p-4 border border-gray-100 shadow-sm hover:bg-gradient-to-br hover:from-gray-50 hover:to-slate-50 transition-all">
                   <div className="flex items-start gap-4">
                     <div className="w-10 h-10 bg-gradient-to-br from-pink-500/20 to-rose-500/20 rounded-lg flex items-center justify-center text-rose-700 font-semibold shadow-sm border border-rose-500/30">
                       3

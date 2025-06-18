@@ -11,6 +11,7 @@ import RefundPolicyPage from './pages/RefundPolicyPage';
 import NotFoundPage from './pages/NotFoundPage';
 import SectionPage from './pages/SectionPage';
 import SuccessPage from './pages/SuccessPage';
+import StatusPage from './pages/StatusPage';
 import AnnouncementBar from './components/ui/AnnouncementBar';
 import { trackVisitor } from './lib/supabase';
 import { initializeGoogleAnalytics, trackPageView } from './lib/analytics';
@@ -60,6 +61,7 @@ function App() {
         <Route path="/terms-of-service" element={<TermsOfServicePage />} />
         <Route path="/refund-policy" element={<RefundPolicyPage />} />
         <Route path="/section/:id" element={<SectionPage />} />
+        <Route path="/status" element={<StatusPage />} />
         <Route path="/success=13493222313453" element={<SuccessPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

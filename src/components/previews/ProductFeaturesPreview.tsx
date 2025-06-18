@@ -1,6 +1,6 @@
 const ProductFeaturesPreview = () => {
   return (
-    <div className="w-full h-full flex items-center justify-center p-1 bg-gray-50">
+    <div className="w-full h-full flex items-center justify-center p-1 bg-gradient-to-br from-gray-50 to-slate-50">
       <div 
         className="w-full max-w-xs rounded-xl p-2 scale-[0.95]"
         style={{ 

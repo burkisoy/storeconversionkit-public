@@ -83,12 +83,22 @@ const PremiumModal: React.FC<PremiumModalProps> = ({ isOpen, onClose }) => {
                         handleAddToCart();
                         onClose();
                       }}
-                      className="block w-full relative"
+                      className="block w-full relative group overflow-hidden"
                     >
-                      <div className="absolute inset-0 bg-blue-600 rounded-xl transition-transform hover:scale-[1.02] shadow-lg shadow-blue-500/20" />
+                      {/* Animated gradient background */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 rounded-xl animate-gradient-x shadow-lg shadow-blue-500/20" />
+                      
+                      {/* Shine effect */}
+                      <div className="absolute inset-0 rounded-xl overflow-hidden">
+                        <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                      </div>
+                      
+                      {/* Pulse effect on hover */}
+                      <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 rounded-xl transition-all duration-300 group-hover:animate-pulse" />
+                      
                       <span className="relative flex items-center justify-center gap-2 py-3.5 text-white font-medium">
-                        <span>Get Premium</span>
-                        <span className="px-2 py-0.5 bg-white/20 rounded-md text-[11px] font-semibold">
+                        <span className="group-hover:scale-105 transition-transform duration-200">Get Premium</span>
+                        <span className="px-2 py-0.5 bg-white/20 rounded-md text-[11px] font-semibold group-hover:bg-white/30 transition-colors duration-200">
                           $39
                         </span>
                       </span>

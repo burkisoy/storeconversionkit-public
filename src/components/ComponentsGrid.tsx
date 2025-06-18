@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ComponentCard from './ComponentCard';
 import { ComponentWithCustomization } from '../types';
 import { supabase } from '../lib/supabase';
+import Fuse from 'fuse.js';
 
 interface ComponentsGridProps {
   components: ComponentWithCustomization[];
@@ -30,11 +31,71 @@ const ComponentsGrid: React.FC<ComponentsGridProps> = ({ components: initialComp
   const [components, setComponents] = useState(initialComponents);
   const [displayedComponents, setDisplayedComponents] = useState<ComponentWithCustomization[]>([]);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [suggestions, setSuggestions] = useState<ComponentWithCustomization[]>([]);
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
   
   const observer = useRef<IntersectionObserver | null>(null);
   const loadMoreRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const suggestionsRef = useRef<HTMLDivElement>(null);
   
   const categories = ['All', 'Recently Added', ...Array.from(new Set(components.map(comp => comp.category)))];
+  
+  // Fuse.js setup for fuzzy search
+  const fuseOptions = {
+    keys: [
+      { name: 'title', weight: 3 },
+      { name: 'description', weight: 2 },
+      { name: 'tags', weight: 1 },
+      { name: 'category', weight: 1 }
+    ],
+    threshold: 0.3,
+    includeScore: true,
+    minMatchCharLength: 2
+  };
+  
+  const fuse = useRef<Fuse<ComponentWithCustomization>>(new Fuse([], fuseOptions));
+  
+  // Update Fuse index when components change
+  useEffect(() => {
+    fuse.current = new Fuse(components, fuseOptions);
+  }, [components]);
+  
+  // Load recent searches from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem('recentSearches');
+    if (saved) {
+      setRecentSearches(JSON.parse(saved));
+    }
+  }, []);
+  
+  // Keyboard shortcut for search (Cmd/Ctrl + K)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+  
+  // Handle clicks outside suggestions
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (suggestionsRef.current && !suggestionsRef.current.contains(e.target as Node) &&
+          searchInputRef.current && !searchInputRef.current.contains(e.target as Node)) {
+        setShowSuggestions(false);
+      }
+    };
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
   
   useEffect(() => {
     const interval = setInterval(() => {
@@ -76,20 +137,7 @@ const ComponentsGrid: React.FC<ComponentsGridProps> = ({ components: initialComp
 
   // Progressive loading of components
   useEffect(() => {
-    const filteredComponents = components
-      .filter(component => {
-        const matchesSearch = 
-          component.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          component.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          component.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-          
-        const matchesCategory = 
-          categoryFilter === '' || 
-          categoryFilter === 'All' || 
-          (categoryFilter === 'Recently Added' ? true : component.category === categoryFilter);
-        
-        return matchesSearch && matchesCategory;
-      });
+    const filteredComponents = getFilteredComponents();
 
     if (isInitialLoad) {
       // On initial load, show only the first batch
@@ -170,21 +218,92 @@ const ComponentsGrid: React.FC<ComponentsGridProps> = ({ components: initialComp
     setIsLoading(false);
   };
 
-  const filteredComponents = components
-    .filter(component => {
-      const matchesSearch = 
-        component.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        component.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        component.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-        
-      const matchesCategory = 
-        categoryFilter === '' || 
-        categoryFilter === 'All' || 
-        (categoryFilter === 'Recently Added' ? true : component.category === categoryFilter);
-      
-      return matchesSearch && matchesCategory;
-    });
+  const getFilteredComponents = () => {
+    let filtered = components;
+    
+    // Apply category filter first
+    if (categoryFilter && categoryFilter !== 'All') {
+      if (categoryFilter === 'Recently Added') {
+        filtered = [...filtered];
+      } else {
+        filtered = filtered.filter(component => component.category === categoryFilter);
+      }
+    }
+    
+    // Apply search filter with fuzzy search
+    if (searchQuery.trim()) {
+      const results = fuse.current.search(searchQuery);
+      filtered = results.map(result => result.item);
+    }
+    
+    return filtered;
+  };
+  
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    setSelectedSuggestionIndex(-1);
+    
+    if (value.trim().length > 1) {
+      const results = fuse.current.search(value).slice(0, 5);
+      setSuggestions(results.map(r => r.item));
+      setShowSuggestions(true);
+    } else if (value.trim().length === 0 && recentSearches.length > 0) {
+      // Show recent searches when input is empty
+      const recentComponents = recentSearches
+        .map(search => {
+          const results = fuse.current.search(search);
+          return results.length > 0 ? results[0].item : null;
+        })
+        .filter(Boolean) as ComponentWithCustomization[];
+      setSuggestions(recentComponents.slice(0, 5));
+      setShowSuggestions(true);
+    } else {
+      setSuggestions([]);
+      setShowSuggestions(false);
+    }
+  };
+  
+  const handleSearchSubmit = (query: string) => {
+    setSearchQuery(query);
+    setShowSuggestions(false);
+    
+    // Save to recent searches
+    if (query.trim()) {
+      const updated = [query, ...recentSearches.filter(s => s !== query)].slice(0, 5);
+      setRecentSearches(updated);
+      localStorage.setItem('recentSearches', JSON.stringify(updated));
+    }
+  };
+  
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!showSuggestions) return;
+    
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setSelectedSuggestionIndex(prev => 
+        prev < suggestions.length - 1 ? prev + 1 : prev
+      );
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setSelectedSuggestionIndex(prev => prev > -1 ? prev - 1 : -1);
+    } else if (e.key === 'Enter' && selectedSuggestionIndex > -1) {
+      e.preventDefault();
+      const selected = suggestions[selectedSuggestionIndex];
+      handleSearchSubmit(selected.title);
+    } else if (e.key === 'Escape') {
+      setShowSuggestions(false);
+      setSelectedSuggestionIndex(-1);
+    }
+  };
+  
+  const clearRecentSearches = () => {
+    setRecentSearches([]);
+    localStorage.removeItem('recentSearches');
+    setShowSuggestions(false);
+  };
 
+  const filteredComponents = getFilteredComponents();
   const hasMore = visibleItems < filteredComponents.length;
 
   return (
@@ -200,11 +319,31 @@ const ComponentsGrid: React.FC<ComponentsGridProps> = ({ components: initialComp
             <Search className="h-5 w-5 text-gray-400" />
           </div>
           <input
+            ref={searchInputRef}
             type="text"
-            className="w-full pl-11 pr-4 py-3 bg-white rounded-xl border border-gray-200 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 transition-all duration-200 text-[15px] shadow-sm"
+            className="w-full pl-11 pr-16 py-3 bg-white rounded-xl border border-gray-200 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 transition-all duration-200 text-[15px] shadow-sm"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={handleSearchChange}
+            onKeyDown={handleKeyDown}
+            onFocus={() => {
+              if (searchQuery.trim().length === 0 && recentSearches.length > 0) {
+                const recentComponents = recentSearches
+                  .map(search => {
+                    const results = fuse.current.search(search);
+                    return results.length > 0 ? results[0].item : null;
+                  })
+                  .filter(Boolean) as ComponentWithCustomization[];
+                setSuggestions(recentComponents.slice(0, 5));
+                setShowSuggestions(true);
+              }
+            }}
           />
+          {/* Keyboard shortcut hint */}
+          <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+            <kbd className="hidden md:inline-flex items-center gap-1 px-2 py-1 text-xs text-gray-400 bg-gray-100 rounded border border-gray-200">
+              <span className="text-[10px]">⌘</span>K
+            </kbd>
+          </div>
           <AnimatePresence mode="wait">
             {!searchQuery && (
               <motion.div
@@ -224,6 +363,58 @@ const ComponentsGrid: React.FC<ComponentsGridProps> = ({ components: initialComp
                 >
                   {searchPlaceholders[placeholderIndex]}
                 </motion.span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+          
+          {/* Search Suggestions */}
+          <AnimatePresence>
+            {showSuggestions && suggestions.length > 0 && (
+              <motion.div
+                ref={suggestionsRef}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden z-50"
+              >
+                {searchQuery.trim().length === 0 && (
+                  <div className="px-4 py-2 border-b border-gray-100 flex items-center justify-between">
+                    <span className="text-xs font-medium text-gray-500">Recent Searches</span>
+                    <button
+                      onClick={clearRecentSearches}
+                      className="text-xs text-blue-600 hover:text-blue-700"
+                    >
+                      Clear
+                    </button>
+                  </div>
+                )}
+                {suggestions.map((suggestion, index) => (
+                  <button
+                    key={suggestion.id}
+                    onClick={() => handleSearchSubmit(suggestion.title)}
+                    onMouseEnter={() => setSelectedSuggestionIndex(index)}
+                    className={`w-full px-4 py-3 text-left flex items-center gap-3 transition-colors ${
+                      index === selectedSuggestionIndex ? 'bg-blue-50' : 'hover:bg-gray-50'
+                    }`}
+                  >
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center flex-shrink-0">
+                      <span className="text-xs font-semibold text-gray-500">
+                        {suggestion.title.substring(0, 2).toUpperCase()}
+                      </span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium text-gray-900 text-sm truncate">
+                        {suggestion.title}
+                      </div>
+                      <div className="text-xs text-gray-500 truncate">
+                        {suggestion.category}
+                      </div>
+                    </div>
+                    {searchQuery.trim().length === 0 && (
+                      <Search className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                    )}
+                  </button>
+                ))}
               </motion.div>
             )}
           </AnimatePresence>
@@ -346,7 +537,15 @@ const ComponentsGrid: React.FC<ComponentsGridProps> = ({ components: initialComp
             <Search className="h-10 w-10" />
           </div>
           <h3 className="text-xl font-medium text-gray-900 mb-2">No sections found</h3>
-          <p className="text-gray-500 text-sm">Try adjusting your search or filter criteria</p>
+          <p className="text-gray-500 text-sm mb-4">Try adjusting your search or filter criteria</p>
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery('')}
+              className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+            >
+              Clear search
+            </button>
+          )}
         </motion.div>
       )}
     </div>

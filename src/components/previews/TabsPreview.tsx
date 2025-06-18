@@ -3,7 +3,7 @@ import React from 'react';
 const TabsPreview = () => {
   return (
     <div className="w-full h-full flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-gray-50 rounded-xl shadow-lg overflow-hidden">
+      <div className="w-full max-w-md bg-gradient-to-br from-gray-50 to-slate-50 rounded-xl shadow-lg overflow-hidden">
         <div className="flex">
           {['Tab 1', 'Tab 2', 'Tab 3'].map((tab, index) => (
             <div

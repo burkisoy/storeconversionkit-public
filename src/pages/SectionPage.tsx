@@ -22,7 +22,7 @@ const SectionPage = () => {
 
   if (!component) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-zinc-50 flex flex-col">
         <Navbar />
         <main className="flex-1 flex items-center justify-center">
           <div className="text-center">
@@ -35,7 +35,7 @@ const SectionPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-zinc-50 flex flex-col">
       <Navbar />
       <main className="flex-1 py-6 sm:py-12 overflow-hidden">
         <div className="container mx-auto px-4 max-w-[100vw]">

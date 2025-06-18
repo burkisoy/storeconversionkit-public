@@ -21,7 +21,7 @@ const CustomizationGroup: React.FC<CustomizationGroupProps> = ({ title, isOpen, 
     <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 mb-4 last:mb-0">
       <button
         onClick={onToggle}
-        className="flex items-center justify-between w-full p-4 text-left bg-gray-50/50 hover:bg-gray-50 transition-colors"
+        className="flex items-center justify-between w-full p-4 text-left bg-gradient-to-r from-gray-50/50 to-slate-50/50 hover:bg-gradient-to-r hover:from-gray-50 hover:to-slate-50 transition-all"
       >
         <span className="text-sm font-medium text-gray-900">{title}</span>
         <ChevronDown 
